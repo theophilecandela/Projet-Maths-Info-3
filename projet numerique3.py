@@ -73,8 +73,8 @@ E_YZ = mu * np.ones((p, 1)) + np.dot(np.dot(cov_YZ, np.linalg.inv(cov_obs)), (ob
 var_YZ = cov_unknown - np.dot(cov_YZ, np.dot(np.linalg.inv(cov_obs), cov_YZ.T))
 var_YZ = -var_YZ
 
-#plt.plot(unknown_indexes, [var_YZ[i][i] for i in range(p)], label = 'Espérance conditionelle de la profondeur')
-#plt.show()
+# plt.plot(unknown_indexes, [var_YZ[i][i] for i in range(p)], label = 'Espérance conditionelle de la profondeur')
+# plt.show()
 
 ###7 Simulation:
 def loi_normale():
@@ -100,7 +100,7 @@ def Cholesky(A):
             L[i][j] = (A[j][i] - sum) / L[j][j]
             s += (L[i][j]) ** 2
             j += 1
-        L[i][i] = A[i][i] - s
+        L[i][i] = np.sqrt(A[i][i] - s)
     return L
     
 L = Cholesky(var_YZ)
@@ -146,6 +146,11 @@ def moyenne_longueur(nb = 100):
         l = longueur(Z)
         lo.append(l)
         s += l
+        plt.plot(discretization, Z)
+    plt.plot(discretization, liste_profondeur(E_YZ, depth, observation_indexes), color = 'red')
+    plt.plot(discretization, np.array(liste_profondeur(np.array([[var_YZ[i][i] for i in range(p)]]).reshape((p,1)), [0 for i in depth], observation_indexes)) + np.array(liste_profondeur(E_YZ, depth, observation_indexes)), color = 'red')
+    plt.plot(discretization, - np.array(liste_profondeur(np.array([[var_YZ[i][i] for i in range(p)]]).reshape((p,1)), [0 for i in depth], observation_indexes)) + np.array(liste_profondeur(E_YZ, depth, observation_indexes)), color = 'red')
+    plt.show()
         
     s = s / nb
     return s, lo
