@@ -24,18 +24,20 @@ depth = np.array([0,-4,-12.8,-1,-6.5,0])
 #Indices des composantes correspondant aux observations et aux componsantes non observées
 unknown_indexes=list(set(discretization_indexes)-set(observation_indexes))
 
-###1
+##1 Covariance
 def cov(h, a = 50, sigma_carre = 12 ):
     return (sigma_carre * np.exp(np.abs(h) / a))
-###2
+    
+##2 Matrice de Distance
 Distance = np.zeros((N,N))
 for i in range(N):
     for j in range(N):
         Distance[i][j] = np.abs( Delta * (i -j))
-###3   
+        
+##3  Matrice de Covariance de Z
 Covariance = cov(Distance)
 
-###4 Matrice extraites:
+##4 Matrice extraites:
 n = len(observation_indexes)
 p = len(unknown_indexes)
 
@@ -148,7 +150,7 @@ def moyenne_longueur(nb = 100):
         s += l
         plt.plot(discretization, Z)
     plt.plot(discretization, liste_profondeur(E_YZ, depth, observation_indexes), color = 'red')
-    plt.plot(discretization, np.array(liste_profondeur(np.array([[var_YZ[i][i] for i in range(p)]]).reshape((p,1)), [0 for i in depth], observation_indexes)) + np.array(liste_profondeur(E_YZ, depth, observation_indexes)), color = 'red')
+    plt.plot(discretization, np.array(liste_profondeur(np.array([[np.sqrt(var_YZ[i][i]) for i in range(p)]]).reshape((p,1)), [0 for i in depth], observation_indexes)) + np.array(liste_profondeur(E_YZ, depth, observation_indexes)), color = 'red')
     plt.plot(discretization, - np.array(liste_profondeur(np.array([[var_YZ[i][i] for i in range(p)]]).reshape((p,1)), [0 for i in depth], observation_indexes)) + np.array(liste_profondeur(E_YZ, depth, observation_indexes)), color = 'red')
     plt.show()
         
@@ -159,9 +161,17 @@ def moyenne_longueur(nb = 100):
 longueur_esperance = longueur(liste_profondeur(E_YZ, depth, observation_indexes))
         
 
+##10
+s, l = moyenne_longueur(100)
+Mn = []
+for i in range(1, len(l) + 1):
+    Mn.append(sum(l[:i])/(i))
+    
+# plt.plot([i for i in range(1, len(Mn)+1)], Mn)
+# plt.show()
 
-
-
-
-
+##
+s, l = moyenne_longueur(10000)
+len([x for x in l if x>525])
+d = sorted(l)[250: 9750]
 
