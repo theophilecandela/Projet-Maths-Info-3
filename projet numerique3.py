@@ -148,12 +148,12 @@ def moyenne_longueur(nb = 100):
         l = longueur(Z)
         lo.append(l)
         s += l
-        plt.plot(discretization, Z)
-    plt.plot(discretization, liste_profondeur(E_YZ, depth, observation_indexes), color = 'red')
-    plt.plot(discretization, np.array(liste_profondeur(np.array([[np.sqrt(var_YZ[i][i]) for i in range(p)]]).reshape((p,1)), [0 for i in depth], observation_indexes)) + np.array(liste_profondeur(E_YZ, depth, observation_indexes)), color = 'red')
-    plt.plot(discretization, - np.array(liste_profondeur(np.array([[var_YZ[i][i] for i in range(p)]]).reshape((p,1)), [0 for i in depth], observation_indexes)) + np.array(liste_profondeur(E_YZ, depth, observation_indexes)), color = 'red')
-    plt.show()
-        
+    #     plt.plot(discretization, Z)
+    # plt.plot(discretization, liste_profondeur(E_YZ, depth, observation_indexes), color = 'red')
+    # plt.plot(discretization, np.array(liste_profondeur(np.array([[np.sqrt(var_YZ[i][i]) for i in range(p)]]).reshape((p,1)), [0 for i in depth], observation_indexes)) + np.array(liste_profondeur(E_YZ, depth, observation_indexes)), color = 'red')
+    # plt.plot(discretization, - np.array(liste_profondeur(np.array([[var_YZ[i][i] for i in range(p)]]).reshape((p,1)), [0 for i in depth], observation_indexes)) + np.array(liste_profondeur(E_YZ, depth, observation_indexes)), color = 'red')
+    # plt.show()
+    #     
     s = s / nb
     return s, lo
     
@@ -170,8 +170,16 @@ for i in range(1, len(l) + 1):
 # plt.plot([i for i in range(1, len(Mn)+1)], Mn)
 # plt.show()
 
+n_bins = 20
+
+# plt.hist(l, bins=n_bins)
+# plt.show()
+
 ##
-s, l = moyenne_longueur(10000)
-len([x for x in l if x>525])
-d = sorted(l)[250: 9750]
+# s, l = moyenne_longueur(10000)
+# len([x for x in l if x>525])
+d = sorted(l)
+conserver = int(0.95 * len(l))
+ecarts = [(i, abs(longueur - s)) for i, longueur in enumerate(d)]
+ecarts = sorted(ecarts, key = lambda x: x[1])
 
